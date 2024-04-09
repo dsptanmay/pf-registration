@@ -1,26 +1,32 @@
 "use server";
 
 import { BaseFormType } from "@/types/forms"
-import { supabase } from "@/database/db";
+import { db } from "@/database/db";
 
 import QRCode from "qrcode";
 import * as fs from "fs";
 
 import { getMailOpts, transporter } from "@/actions/mailActions";
+import { eq } from "drizzle-orm";
+import { boys, girls, master, sit, walkathon } from "@/database/schema";
 
 export async function getQRCode(uniqueCode: string) {
-    return await supabase.from("master").select("qrcodedata").eq("unique_code", uniqueCode).single();
+    return await db.query.master.findFirst({
+        where: eq(master.uniqueCode, uniqueCode)
+    })
+    //  db.select({ qrcodedata: master.qrcodedata }).from(master).limit(1).where(eq(master.uniqueCode, uniqueCode));
+
 }
 
-export async function pushData(formData: BaseFormType, category: "boy" | "girl" | "walkathon") {
+export async function pushData(formData: BaseFormType, category: "boys" | "girls" | "walkathon") {
     const qrCodePath = `qrCode_${Date.now()}.png`;
     const baseQrData = `name: ${formData.name} uc: ${formData.unique_code}`;
     const mailOpts = getMailOpts(formData.name, formData.email, qrCodePath);
 
     let qrData = baseQrData;
-    if (category === 'boy')
+    if (category === 'boys')
         qrData += " b";
-    else if (category === "girl")
+    else if (category === "girls")
         qrData += " g";
     else if (category === "walkathon")
         qrData += " w";
@@ -34,20 +40,54 @@ export async function pushData(formData: BaseFormType, category: "boy" | "girl" 
         formData.qrcodedata = q64;
     }
 
-    if (category === "boy")
-        await supabase.from("users").insert(formData);
-    else if (category === "girl")
-        await supabase.from("girls").insert(formData);
+    if (category === "boys")
+        await db.insert(boys).values({
+            name: formData.name,
+            email: formData.email,
+            mobileNo: formData.mobile_no,
+            usn: formData.usn,
+            uniqueCode: formData.unique_code,
+            qrcodedata: formData.qrcodedata
+        })
+    else if (category === "girls")
+        await db.insert(girls).values({
+            name: formData.name,
+            email: formData.email,
+            mobileNo: formData.mobile_no,
+            usn: formData.usn,
+            uniqueCode: formData.unique_code,
+            qrcodedata: formData.qrcodedata
+        })
     else if (category === "walkathon")
-        await supabase.from("walkathon").insert(formData)
+        await db.insert(walkathon).values({
+            name: formData.name,
+            email: formData.email,
+            mobileNo: formData.mobile_no,
+            uniqueCode: formData.unique_code,
+            qrcodedata: formData.qrcodedata
+        })
 
-    await supabase.from("master").insert(formData);
+    await db.insert(master).values({
+        name: formData.name,
+        email: formData.email,
+        mobileNo: formData.mobile_no,
+        usn: formData.usn,
+        uniqueCode: formData.unique_code,
+        qrcodedata: formData.qrcodedata
+    })
 
     if (formData.usn &&
         (formData.usn[1] == 'S' || formData.usn[1] == 's') &&
         (formData.usn[2] == 'i' || formData.usn[2] == 'I')
     ) {
-        await supabase.from("sit").insert(formData)
+        await db.insert(sit).values({
+            name: formData.name,
+            email: formData.email,
+            mobileNo: formData.mobile_no,
+            usn: formData.usn,
+            uniqueCode: formData.unique_code,
+            qrcodedata: formData.qrcodedata
+        })
     }
 
     transporter.sendMail(mailOpts, () => {
