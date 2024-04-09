@@ -1,9 +1,9 @@
-import BoysForm from "@/components/BoysForm";
-import React from "react";
+import BForm from '@/components/BoysForm';
+import React from 'react';
 
-const BoysPage = () => {
+const BoysPage: React.FC = () => {
     return (
-        <BoysForm />
+        <BForm />
     )
 }
 
