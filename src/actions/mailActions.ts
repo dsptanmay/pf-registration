@@ -4,8 +4,8 @@ export const transporter = nodemailer.createTransport(
     {
         service: "Gmail",
         auth: {
-            user: process.env.GMAIL_ID as string,
-            pass: process.env.GMAIL_PWD as string
+            user: process.env.NEXT_PUBLIC_GMAIL_ID as string,
+            pass: process.env.NEXT_PUBLIC_GMAIL_PWD as string
         }
     }
 )
