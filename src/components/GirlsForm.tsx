@@ -15,7 +15,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const BForm = () => {
+const GForm = () => {
     const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
@@ -56,7 +56,7 @@ const BForm = () => {
     return (
         <div className="h-screen max:h-screen-auto flex justify-center items-center bg-gradient-to-br from-orange-500/35 via-blue-300 to-purple-400/40">
             <div className="bg-white p-8 rounded-xl shadow-lg mr-3 ml-3 mt-5 mb-5 ">
-                <h1 className='font-bold text-3xl text-center m-3'>Marathon 15.0 Registrations - Boys</h1>
+                <h1 className='font-bold text-3xl text-center m-3'>Marathon 15.0 Registrations - Girls</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center">
                     <div className="mb-4">
                         <label htmlFor="name" className="block font-semibold mb-2">
@@ -133,4 +133,4 @@ const BForm = () => {
     );
 };
 
-export default BForm;
+export default GForm;
