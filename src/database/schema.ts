@@ -18,7 +18,7 @@ export const girls = pgTable('girls', {
     qrcodedata: varchar("qrcodedata")
 });
 
-export const walk = pgTable('walk', {
+export const walkathon = pgTable('walk', {
     name: varchar('name'),
     mobileNo: varchar('mobile_no'),
     uniqueCode: varchar('unique_code').primaryKey(),
