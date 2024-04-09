@@ -14,8 +14,6 @@ export async function getQRCode(uniqueCode: string) {
     return await db.query.master.findFirst({
         where: eq(master.uniqueCode, uniqueCode)
     })
-    //  db.select({ qrcodedata: master.qrcodedata }).from(master).limit(1).where(eq(master.uniqueCode, uniqueCode));
-
 }
 
 export async function pushData(formData: BaseFormType, category: "boys" | "girls" | "walkathon") {
