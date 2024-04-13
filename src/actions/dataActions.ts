@@ -6,7 +6,7 @@ import { db } from "@/database/db";
 import QRCode from "qrcode";
 import * as fs from "fs";
 
-import { getMailOpts, transporter } from "@/actions/mailActions";
+import { getQRMailOpts, boys_transporter } from "@/actions/mailActions";
 import { eq } from "drizzle-orm";
 import {
   boys,
@@ -52,7 +52,7 @@ export async function pushData(
 ) {
   const qrCodePath = `qrCode_${Date.now()}.png`;
   const baseQrData = `name: ${formData.name} uc: ${formData.unique_code}`;
-  const mailOpts = getMailOpts(formData.name, formData.email, qrCodePath);
+  const mailOpts = getQRMailOpts(formData.name, formData.email, qrCodePath);
 
   let qrData = baseQrData;
   if (category === "boys") qrData += " b";
@@ -118,7 +118,7 @@ export async function pushData(
     });
   }
 
-  transporter.sendMail(mailOpts, () => {
+  boys_transporter.sendMail(mailOpts, () => {
     fs.unlinkSync(qrCodePath);
   });
 }
