@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 export const primary_transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -25,7 +27,7 @@ export const walkathon_transporter = nodemailer.createTransport({
 });
 
 export function getQRMailOpts(name: string, email: string, qrContent: string) {
-  const opts = {
+  const opts: Mail.Options = {
     from: process.env.NEXT_PUBLIC_PRI_GMAIL_ID,
     to: email,
     subject: "Thank You for Participating!",
@@ -82,9 +84,16 @@ export function getQRMailOpts(name: string, email: string, qrContent: string) {
       {
         filename: "qrCode.png",
         content: qrContent.split(";base64,").pop(),
-        encoding: "base64"
+        encoding: "base64",
       },
     ],
   };
   return opts;
+}
+
+export default async function sendMail(
+  transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>,
+  mailOpts: Mail.Options
+) {
+  await transporter.sendMail(mailOpts);
 }
