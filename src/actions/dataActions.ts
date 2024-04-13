@@ -4,7 +4,6 @@ import { BaseFormType } from "@/types/forms";
 import { db } from "@/database/db";
 
 import QRCode from "qrcode";
-import * as fs from "fs";
 
 import { getQRMailOpts, primary_transporter } from "@/actions/mailActions";
 import { eq } from "drizzle-orm";
