@@ -24,19 +24,34 @@ export async function getQRCode(uniqueCode: string) {
   });
 }
 
+export async function getOneParticipant(participantEmail: string) {
+  return await db
+    .select()
+    .from(master)
+    .where(eq(master.email, participantEmail));
+}
+
 export async function getParticipants(
   category: "boys" | "girls" | "walkathon"
 ) {
   if (category === "boys")
-    return await db.select({ name: boys.name, email: boys.email }).from(boys);
+    return await db
+      .select({ name: boysCross.name, email: boys.email })
+      .from(boys)
+      .leftJoin(boysCross, eq(boys.uniqueCode, boysCross.uniqueCode));
   else if (category === "girls")
     return await db
-      .select({ name: girls.name, email: girls.email })
-      .from(girls);
+      .select({ name: girlsCross.name, email: girls.email })
+      .from(girls)
+      .leftJoin(girlsCross, eq(girls.uniqueCode, girlsCross.uniqueCode));
   else if (category === "walkathon")
     return await db
-      .select({ name: walkathon.name, email: walkathon.email })
-      .from(walkathon);
+      .select({ name: walkathonCross.name, email: walkathon.email })
+      .from(walkathon)
+      .leftJoin(
+        walkathonCross,
+        eq(walkathon.uniqueCode, walkathonCross.uniqueCode)
+      );
 }
 
 export async function getTopParticipants(
@@ -75,6 +90,7 @@ export async function pushData(
 
   const qrDataURL = await QRCode.toDataURL(qrData);
   const mailOpts = getQRMailOpts(formData.name, formData.email, qrDataURL);
+  formData.qrcodedata = qrDataURL.split(";base64,").pop();
 
   if (category === "boys")
     await db.insert(boys).values({
