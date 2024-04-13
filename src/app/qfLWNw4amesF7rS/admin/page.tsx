@@ -1,7 +1,7 @@
 "use client";
 import BoysCrossComponent from "@/components/BoysTop20";
 import GirlsCrossComponent from "@/components/GirlsTop20";
-import WalkCrossComponent from "@/components/WalkathonTop20";
+import WalkCrossComponent from "@/components/WalkathonTop10";
 import React from "react";
 
 const AdminPage = () => {
