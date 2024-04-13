@@ -8,7 +8,7 @@ const FrontPage: React.FC = () => {
     const router = useRouter();
     return (
         <div className="h-screen max:h-screen-auto flex flex-col justify-center items-center bg-gradient-to-br from-orange-500/35 via-blue-300 to-purple-400/40">
-            <Image src={pfLogo} alt="Pathfinder Logo" height={200} className="absolute top-[-3rem]"></Image>
+            <Image src={pfLogo} alt="Pathfinder Logo" height={150} className="absolute top-[0rem]"></Image>
             <div className="bg-white rounded-[10px] drop-shadow-md flex flex-col items-center justify-between p-10 m-10">
                 <h2 className="font-bold text-3xl text-center p-3 bg-clip-text text-transparent inline-block bg-gradient-to-br from-sky-400 via-blue-600 to-indigo-800 drop-shadow-md">Choose your category</h2>
                 <button className="font-semibold border m-5 rounded text-center p-2 bg-blue-600 text-white text-2xl drop-shadow-sm" onClick={() => {
