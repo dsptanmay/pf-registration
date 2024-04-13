@@ -26,6 +26,33 @@ export const walkathon_transporter = nodemailer.createTransport({
   },
 });
 
+export function getCertMailOpts(
+  name: string,
+  email: string,
+  pdfContent: Buffer,
+  category: "boys" | "girls" | "walkathon"
+) {
+  const opts: Mail.Options = {
+    to: email,
+    subject: "Certificate of Participation - Marathon 15.0",
+    text: `Dear ${name}, \n\nThank you for taking part in our event!\n\nPlease find attached a copy of your participation certificate.\n\nBest Regards,\n\nTeam Pathfinder`,
+    attachments: [
+      {
+        filename: "certificate.pdf",
+        content: pdfContent,
+      },
+    ],
+  };
+  if (category === "boys")
+    opts.from = process.env.NEXT_PUBLIC_PRI_GMAIL_ID as string;
+  else if (category === "girls")
+    opts.from = process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string;
+  else if (category === "walkathon")
+    opts.from = process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string;
+
+  return opts;
+}
+
 export function getQRMailOpts(name: string, email: string, qrContent: string) {
   const opts: Mail.Options = {
     from: process.env.NEXT_PUBLIC_PRI_GMAIL_ID,
