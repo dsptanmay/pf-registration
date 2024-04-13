@@ -4,8 +4,8 @@ export const boys_transporter = nodemailer.createTransport(
     {
         service: "Gmail",
         auth: {
-            user: process.env.NEXT_PUBLIC_GMAIL_ID as string,
-            pass: process.env.NEXT_PUBLIC_GMAIL_PWD as string
+            user: process.env.NEXT_PUBLIC_BOYS_GMAIL_ID as string,
+            pass: process.env.NEXT_PUBLIC_BOYS_GMAIL_PWD as string
         }
     }
 )
@@ -24,8 +24,8 @@ export const walkathon_transporter = nodemailer.createTransport(
   {
     service: "Gmail",
     auth:{
-      user: process.env.NEXT_PUBLIC_WALK_GMAIL_ID as string,
-      pass: process.env.NEXT_PUBLIC_WALK_GMAIL_PWD as string
+      user: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string,
+      pass: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_PWD as string
     }
   }
 )
