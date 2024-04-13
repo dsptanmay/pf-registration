@@ -24,6 +24,21 @@ export async function getQRCode(uniqueCode: string) {
   });
 }
 
+export async function getParticipants(
+  category: "boys" | "girls" | "walkathon"
+) {
+  if (category === "boys")
+    return await db.select({ name: boys.name, email: boys.email }).from(boys);
+  else if (category === "girls")
+    return await db
+      .select({ name: girls.name, email: girls.email })
+      .from(girls);
+  else if (category === "walkathon")
+    return await db
+      .select({ name: walkathon.name, email: walkathon.email })
+      .from(walkathon);
+}
+
 export async function getTopParticipants(
   category: "boys" | "girls" | "walkathon"
 ) {
@@ -52,15 +67,14 @@ export async function pushData(
   category: "boys" | "girls" | "walkathon"
 ) {
   const baseQrData = `name: ${formData.name} uc: ${formData.unique_code}`;
-  
+
   let qrData = baseQrData;
   if (category === "boys") qrData += " b";
   else if (category === "girls") qrData += " g";
   else if (category === "walkathon") qrData += " w";
-  
+
   const qrDataURL = await QRCode.toDataURL(qrData);
   const mailOpts = getQRMailOpts(formData.name, formData.email, qrDataURL);
-  
 
   if (category === "boys")
     await db.insert(boys).values({
