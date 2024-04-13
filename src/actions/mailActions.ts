@@ -118,7 +118,7 @@ export function getQRMailOpts(name: string, email: string, qrContent: string) {
   return opts;
 }
 
-export default async function sendMail(
+export default async function sendMailSimplified(
   transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>,
   mailOpts: Mail.Options
 ) {
