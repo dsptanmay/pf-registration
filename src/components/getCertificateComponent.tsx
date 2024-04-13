@@ -45,7 +45,7 @@ const GetCertificateComponent = () => {
       <Image
         src={pfLogo}
         alt="pf logo"
-        height={175}
+        height={150}
         className="absolute top-[1rem]"
       />
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
@@ -54,7 +54,7 @@ const GetCertificateComponent = () => {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder="Enter your registered email address"
           className="mb-4 px-10 py-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {error && <p className="mb-4 text-red-500">{error}</p>}
