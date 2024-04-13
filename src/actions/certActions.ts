@@ -1,20 +1,21 @@
 "use server";
 
 import { PDFDocument, rgb } from "pdf-lib";
+import { getCertMailOpts, primary_transporter } from "@/actions/mailActions";
 
 export async function generateCertificate(
-  participantName: string,
-  participantImage: string
+  participantName: string
 ): Promise<Buffer> {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([3508, 2456]);
 
   const font = await pdfDoc.embedFont("Times-BoldItalic");
+  const imgBytes = await fetch(
+    "https://i.postimg.cc/qq98pptL/participate.png"
+  ).then((img) => img.arrayBuffer());
   const textWidth = font.widthOfTextAtSize(participantName, 100);
 
-  const pngImage = await pdfDoc.embedPng(
-    Buffer.from(participantImage, "base64")
-  );
+  const pngImage = await pdfDoc.embedPng(imgBytes);
 
   page.drawImage(pngImage, {
     x: 0,
@@ -33,4 +34,19 @@ export async function generateCertificate(
 
   const pdfBytes = await pdfDoc.save();
   return Buffer.from(pdfBytes);
+}
+
+export async function sendCertificateEmail(
+  participantName: string,
+  participantEmail: string
+) {
+  const pdfContent = await generateCertificate(participantName);
+  const mailOpts = getCertMailOpts(
+    participantName,
+    participantEmail,
+    pdfContent,
+    "boys"
+  );
+
+  await primary_transporter.sendMail(mailOpts);
 }
