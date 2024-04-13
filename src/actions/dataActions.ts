@@ -77,6 +77,13 @@ export async function getTopParticipants(
       .limit(10);
 }
 
+export async function getSITParticipants() {
+  return await db
+    .select({ name: sit.name, usn: sit.usn })
+    .from(sit)
+    .orderBy(sit.usn);
+}
+
 export async function pushData(
   formData: BaseFormType,
   category: "boys" | "girls" | "walkathon"
@@ -97,7 +104,7 @@ export async function pushData(
       name: formData.name,
       email: formData.email,
       mobileNo: formData.mobile_no,
-      usn: formData.usn,
+      usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
       qrcodedata: formData.qrcodedata,
     });
@@ -106,7 +113,7 @@ export async function pushData(
       name: formData.name,
       email: formData.email,
       mobileNo: formData.mobile_no,
-      usn: formData.usn,
+      usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
       qrcodedata: formData.qrcodedata,
     });
@@ -123,7 +130,7 @@ export async function pushData(
     name: formData.name,
     email: formData.email,
     mobileNo: formData.mobile_no,
-    usn: formData.usn,
+    usn: formData.usn?.toUpperCase(),
     uniqueCode: formData.unique_code,
     qrcodedata: formData.qrcodedata,
   });
@@ -137,7 +144,7 @@ export async function pushData(
       name: formData.name,
       email: formData.email,
       mobileNo: formData.mobile_no,
-      usn: formData.usn,
+      usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
       qrcodedata: formData.qrcodedata,
     });
