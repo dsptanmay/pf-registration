@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const transporter = nodemailer.createTransport(
+export const boys_transporter = nodemailer.createTransport(
     {
         service: "Gmail",
         auth: {
@@ -10,7 +10,27 @@ export const transporter = nodemailer.createTransport(
     }
 )
 
-export function getMailOpts(name: string, email: string, path: string)
+export const girls_transporter = nodemailer.createTransport(
+  {
+    service: "Gmail",
+    auth:{
+      user: process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string,
+      pass: process.env.NEXT_PUBLIC_GIRLS_GMAIL_PWD as string
+    }
+  }
+)
+
+export const walkathon_transporter = nodemailer.createTransport(
+  {
+    service: "Gmail",
+    auth:{
+      user: process.env.NEXT_PUBLIC_WALK_GMAIL_ID as string,
+      pass: process.env.NEXT_PUBLIC_WALK_GMAIL_PWD as string
+    }
+  }
+)
+
+export function getQRMailOpts(name: string, email: string, path: string)
 {
     const opts = {
         from: 'pfmarathon15.0@gmail.com',
