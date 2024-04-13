@@ -8,6 +8,6 @@ export type BaseFormType = {
 };
 
 export type CrossData = {
-  name: string;
-  time: string;
+  name: string | null;
+  time: Date;
 };

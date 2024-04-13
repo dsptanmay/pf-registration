@@ -1,6 +1,6 @@
 import React from "react";
 
-const ListItem: React.FC<{ item: { name: string; time: string } }> = ({
+const ListItem: React.FC<{ item: { name: string | null; time: Date } }> = ({
   item,
 }) => {
   return (

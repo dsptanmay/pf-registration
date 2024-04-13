@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import ListItem from "@/components/ListItem";
 
 const BoysCrossComponent: React.FC = () => {
-  const [data, setData] = useState<CrossData[]>([]);
+  const [data, setData] = useState<CrossData[] | undefined>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [showData, setShowData] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ const BoysCrossComponent: React.FC = () => {
       {showData && (
         <div>
           <ul>
-            {data.map((participant, idx) => (
+            {data?.map((participant, idx) => (
               <ListItem key={idx} item={participant} />
             ))}
           </ul>
