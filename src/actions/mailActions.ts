@@ -1,42 +1,35 @@
 import nodemailer from "nodemailer";
 
-export const boys_transporter = nodemailer.createTransport(
-    {
-        service: "Gmail",
-        auth: {
-            user: process.env.NEXT_PUBLIC_BOYS_GMAIL_ID as string,
-            pass: process.env.NEXT_PUBLIC_BOYS_GMAIL_PWD as string
-        }
-    }
-)
+export const primary_transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.NEXT_PUBLIC_PRI_GMAIL_ID as string,
+    pass: process.env.NEXT_PUBLIC_PRI_GMAIL_PWD as string,
+  },
+});
 
-export const girls_transporter = nodemailer.createTransport(
-  {
-    service: "Gmail",
-    auth:{
-      user: process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string,
-      pass: process.env.NEXT_PUBLIC_GIRLS_GMAIL_PWD as string
-    }
-  }
-)
+export const girls_transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string,
+    pass: process.env.NEXT_PUBLIC_GIRLS_GMAIL_PWD as string,
+  },
+});
 
-export const walkathon_transporter = nodemailer.createTransport(
-  {
-    service: "Gmail",
-    auth:{
-      user: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string,
-      pass: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_PWD as string
-    }
-  }
-)
+export const walkathon_transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string,
+    pass: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_PWD as string,
+  },
+});
 
-export function getQRMailOpts(name: string, email: string, path: string)
-{
-    const opts = {
-        from: 'pfmarathon15.0@gmail.com',
-        to: email,
-        subject: 'Thank You for Participating!',
-        html: `
+export function getQRMailOpts(name: string, email: string, qrContent: string) {
+  const opts = {
+    from: process.env.NEXT_PUBLIC_PRI_GMAIL_ID,
+    to: email,
+    subject: "Thank You for Participating!",
+    html: `
           <html>
             <head>
               <style>
@@ -85,12 +78,13 @@ export function getQRMailOpts(name: string, email: string, path: string)
             </body>
           </html>
         `,
-        attachments: [
-            {
-                filename: 'qrCode.png',
-                path: path
-            }
-        ]
-    };
-    return opts;
+    attachments: [
+      {
+        filename: "qrCode.png",
+        content: qrContent.split(";base64,").pop(),
+        encoding: "base64"
+      },
+    ],
+  };
+  return opts;
 }
