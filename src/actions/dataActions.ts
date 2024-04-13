@@ -6,7 +6,7 @@ import { db } from "@/database/db";
 import QRCode from "qrcode";
 import * as fs from "fs";
 
-import { getQRMailOpts, boys_transporter } from "@/actions/mailActions";
+import { getQRMailOpts, primary_transporter } from "@/actions/mailActions";
 import { eq } from "drizzle-orm";
 import {
   boys,
@@ -25,7 +25,9 @@ export async function getQRCode(uniqueCode: string) {
   });
 }
 
-export async function getTopParticipants(category: "boys" | "girls" | "walkathon") {
+export async function getTopParticipants(
+  category: "boys" | "girls" | "walkathon"
+) {
   if (category === "boys")
     return await db
       .select({ name: boysCross.name, time: boysCross.time })
@@ -50,22 +52,16 @@ export async function pushData(
   formData: BaseFormType,
   category: "boys" | "girls" | "walkathon"
 ) {
-  const qrCodePath = `qrCode_${Date.now()}.png`;
   const baseQrData = `name: ${formData.name} uc: ${formData.unique_code}`;
-  const mailOpts = getQRMailOpts(formData.name, formData.email, qrCodePath);
-
+  
   let qrData = baseQrData;
   if (category === "boys") qrData += " b";
   else if (category === "girls") qrData += " g";
   else if (category === "walkathon") qrData += " w";
-
-  await QRCode.toFile(qrCodePath, qrData);
-
-  if (qrCodePath) {
-    const qrBuffer = fs.readFileSync(qrCodePath);
-    const q64 = qrBuffer.toString("base64");
-    formData.qrcodedata = q64;
-  }
+  
+  const qrDataURL = await QRCode.toDataURL(qrData);
+  const mailOpts = getQRMailOpts(formData.name, formData.email, qrDataURL);
+  
 
   if (category === "boys")
     await db.insert(boys).values({
@@ -118,7 +114,5 @@ export async function pushData(
     });
   }
 
-  boys_transporter.sendMail(mailOpts, () => {
-    fs.unlinkSync(qrCodePath);
-  });
+  primary_transporter.sendMail(mailOpts);
 }
