@@ -48,5 +48,5 @@ export async function sendCertificateEmail(
     "boys"
   );
 
-  await primary_transporter.sendMail(mailOpts);
+  primary_transporter.sendMail(mailOpts);
 }
