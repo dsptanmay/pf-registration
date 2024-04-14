@@ -1,63 +1,63 @@
 import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const boys = pgTable("boys", {
-  name: varchar("name"),
-  mobileNo: varchar("mobile_no"),
+  name: varchar("name").notNull(),
+  mobileNo: varchar("mobile_no").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
-  email: varchar("email"),
+  email: varchar("email").notNull(),
   usn: varchar("usn"),
-  qrcodedata: varchar("qrcodedata"),
+  qrcodedata: varchar("qrcodedata").notNull(),
 });
 
 export const girls = pgTable("girls", {
-  name: varchar("name"),
-  mobileNo: varchar("mobile_no"),
+  name: varchar("name").notNull(),
+  mobileNo: varchar("mobile_no").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
-  email: varchar("email"),
+  email: varchar("email").notNull(),
   usn: varchar("usn"),
-  qrcodedata: varchar("qrcodedata"),
+  qrcodedata: varchar("qrcodedata").notNull(),
 });
 
 export const walkathon = pgTable("walkathon", {
-  name: varchar("name"),
-  mobileNo: varchar("mobile_no"),
+  name: varchar("name").notNull(),
+  mobileNo: varchar("mobile_no").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
-  email: varchar("email"),
-  qrcodedata: varchar("qrcodedata"),
+  email: varchar("email").notNull(),
+  qrcodedata: varchar("qrcodedata").notNull(),
 });
 
 export const sit = pgTable("sit_participants", {
-  name: varchar("name"),
-  mobileNo: varchar("mobile_no"),
+  name: varchar("name").notNull(),
+  mobileNo: varchar("mobile_no").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
-  email: varchar("email"),
-  usn: varchar("usn"),
-  qrcodedata: varchar("qrcodedata"),
+  email: varchar("email").notNull(),
+  usn: varchar("usn").notNull(),
+  qrcodedata: varchar("qrcodedata").notNull(),
 });
 
 export const master = pgTable("master", {
-  name: varchar("name"),
-  mobileNo: varchar("mobile_no"),
+  name: varchar("name").notNull(),
+  mobileNo: varchar("mobile_no").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
-  email: varchar("email"),
+  email: varchar("email").notNull(),
   usn: varchar("usn"),
-  qrcodedata: varchar("qrcodedata"),
+  qrcodedata: varchar("qrcodedata").notNull(),
 });
 
 export const boysCross = pgTable("cross_boys", {
-  name: varchar("name"),
+  name: varchar("name").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
   time: timestamp("time").notNull(),
 });
 
 export const girlsCross = pgTable("cross_girls", {
-  name: varchar("name"),
+  name: varchar("name").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
   time: timestamp("time").notNull(),
 });
 
 export const walkathonCross = pgTable("cross_walkathon", {
-  name: varchar("name"),
+  name: varchar("name").notNull(),
   uniqueCode: varchar("unique_code").primaryKey(),
   time: timestamp("time").notNull(),
 });
