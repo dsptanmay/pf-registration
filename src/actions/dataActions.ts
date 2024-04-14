@@ -1,6 +1,6 @@
 "use server";
 
-import { BaseFormType } from "@/types/forms";
+import { BaseFormType, CrossData2 } from "@/types/forms";
 import { db } from "@/database/db";
 
 import QRCode from "qrcode";
@@ -17,6 +17,7 @@ import {
   walkathon,
   walkathonCross,
 } from "@/database/schema";
+import { PDFDocument, rgb } from "pdf-lib";
 
 export async function getQRCode(uniqueCode: string) {
   return await db.query.master.findFirst({
@@ -106,7 +107,7 @@ export async function pushData(
       mobileNo: formData.mobile_no,
       usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
-      qrcodedata: formData.qrcodedata,
+      qrcodedata: formData.qrcodedata as string,
     });
   else if (category === "girls")
     await db.insert(girls).values({
@@ -115,7 +116,7 @@ export async function pushData(
       mobileNo: formData.mobile_no,
       usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
-      qrcodedata: formData.qrcodedata,
+      qrcodedata: formData.qrcodedata as string,
     });
   else if (category === "walkathon")
     await db.insert(walkathon).values({
@@ -123,7 +124,7 @@ export async function pushData(
       email: formData.email,
       mobileNo: formData.mobile_no,
       uniqueCode: formData.unique_code,
-      qrcodedata: formData.qrcodedata,
+      qrcodedata: formData.qrcodedata as string,
     });
 
   await db.insert(master).values({
@@ -132,7 +133,7 @@ export async function pushData(
     mobileNo: formData.mobile_no,
     usn: formData.usn?.toUpperCase(),
     uniqueCode: formData.unique_code,
-    qrcodedata: formData.qrcodedata,
+    qrcodedata: formData.qrcodedata as string,
   });
 
   if (
@@ -146,7 +147,7 @@ export async function pushData(
       mobileNo: formData.mobile_no,
       usn: formData.usn?.toUpperCase(),
       uniqueCode: formData.unique_code,
-      qrcodedata: formData.qrcodedata,
+      qrcodedata: formData.qrcodedata as string,
     });
   }
 
