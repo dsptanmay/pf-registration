@@ -7,7 +7,11 @@ export type BaseFormType = {
   qrcodedata?: string;
 };
 
+                                                                      
 export type CrossData = {
-  name: string | null;
-  time: Date;
+  email: string | null;
+  name: string;
+  phone: string | null;
+  timeCrossed: Date;
+  uniqueCode: string;
 };
