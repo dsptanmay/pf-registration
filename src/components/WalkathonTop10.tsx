@@ -2,23 +2,31 @@
 import { getTopParticipants } from "@/actions/dataActions";
 import { CrossData } from "@/types/forms";
 import React, { useState } from "react";
-import ListItem from "@/components/ListItem";
+import { generatePdf } from "@/actions/pdfActions";
 
-const WalkCrossComponent: React.FC = () => {
-  const [data, setData] = useState<CrossData[] | undefined>([]);
+const WalkathonCrossComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [showData, setShowData] = useState<boolean>(false);
+
+  const handleDownload = async (params: CrossData[]) => {
+    const pdfBytes = await generatePdf(params, "Top 10 Participants - Walkathon");
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "Top10-Walkathon.pdf";
+
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
     const res = await getTopParticipants("walkathon");
-    setData(res);
-    setShowData(true);
+    await handleDownload(res as CrossData[]);
     setLoading(false);
-  };
-
-  const handleClose = () => {
-    setShowData(false);
   };
 
   return (
@@ -26,33 +34,15 @@ const WalkCrossComponent: React.FC = () => {
       <h1 className="text-xl font-bold mb-4 text-center">
         Top 10 Participants - Walkathon
       </h1>
-      {!showData && (
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="bg-orange-400 text-white px-4 py-2 rounded-md w-full mb-4"
-        >
-          {loading ? "Loading..." : "Fetch Data"}
-        </button>
-      )}
-
-      {showData && (
-        <div>
-          <ul>
-            {data?.map((participant, idx) => (
-              <ListItem key={idx} item={participant} />
-            ))}
-          </ul>
-          <button
-            onClick={handleClose}
-            className="bg-red-500 text-white px-2 py-1 rounded-md relative bottom-4"
-          >
-            Close
-          </button>
-        </div>
-      )}
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="bg-orange-400 text-white px-4 py-2 rounded-md w-full mb-4"
+      >
+        {loading ? "Loading..." : "Fetch Data"}
+      </button>
     </div>
   );
 };
 
-export default WalkCrossComponent;
+export default WalkathonCrossComponent;
