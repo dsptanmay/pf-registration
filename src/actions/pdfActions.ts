@@ -118,12 +118,12 @@ export async function generatePdf(data: CrossData[], title?: string) {
       table.y
     );
     table.writeText(
-      participant.email,
+      participant.email as string,
       table.x + table.cellPadding + (tableWidth * 3) / 5,
       table.y
     );
     table.writeText(
-      participant.phone,
+      participant.phone as string,
       table.x + table.cellPadding + (tableWidth * 4) / 5,
       table.y
     );
