@@ -1,12 +1,24 @@
-import { PDFDocument, PageSizes, rgb, PDFFont, StandardFonts } from "pdf-lib";
+import { PDFDocument, PageSizes, rgb, StandardFonts } from "pdf-lib";
+import { CrossData } from "@/types/forms";
 
-type CrossData = {
-  email: string;
-  name: string;
-  phone: string;
-  timeCrossed: string;
-  uniqueCode: string;
-};
+function fixTimeFormat(time: Date) {
+  const timeZoneOffset = time.getTimezoneOffset();
+  const adjustedTime = new Date(time.getTime() + timeZoneOffset * 60 * 1000);
+
+  const month = String(adjustedTime.getMonth() + 1).padStart(2, "0");
+  const date = String(adjustedTime.getDate()).padStart(2, "0");
+
+  const formattedDate = `${date}-${month}-${adjustedTime.getFullYear()}`;
+
+  let hours = adjustedTime.getHours();
+  const minutes = String(adjustedTime.getMinutes()).padStart(2, "0");
+  const seconds = String(adjustedTime.getSeconds()).padStart(2, "0");
+
+  const amPm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+  const fixedTime = `${formattedDate} ${hours}:${minutes}:${seconds} ${amPm}`;
+  return fixedTime;
+}
 
 export async function generatePdf(data: CrossData[], title?: string) {
   const pdfDoc = await PDFDocument.create();
@@ -93,6 +105,7 @@ export async function generatePdf(data: CrossData[], title?: string) {
 
   page.setFont(timesRomanFont);
   data.forEach((participant, idx) => {
+    const formattedTime = fixTimeFormat(participant.timeCrossed);
     table.writeText(participant.name, table.x + table.cellPadding, table.y);
     table.writeText(
       participant.uniqueCode,
@@ -100,7 +113,7 @@ export async function generatePdf(data: CrossData[], title?: string) {
       table.y
     );
     table.writeText(
-      participant.timeCrossed,
+      formattedTime,
       table.x + table.cellPadding + (tableWidth * 2) / 5,
       table.y
     );
@@ -121,7 +134,6 @@ export async function generatePdf(data: CrossData[], title?: string) {
   for (let i = 0; i < table.rows; ++i) {
     const y = table.y + 8 + table.rowHeight * i;
     table.drawHorizontalLine(table.x, y, table.tableWidth);
-    console.log(y);
   }
 
   const pdfBytes = await pdfDoc.save();
