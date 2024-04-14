@@ -55,25 +55,44 @@ export async function getParticipants(
       );
 }
 
-export async function getTopParticipants(
-  category: "boys" | "girls" | "walkathon"
-) {
+export async function getTopParticipants(category: "boys" | "girls" | "walkathon") {
   if (category === "boys")
     return await db
-      .select({ name: boysCross.name, time: boysCross.time })
+      .select({
+        uniqueCode: boysCross.uniqueCode,
+        name: boysCross.name,
+        timeCrossed: boysCross.time,
+        phone: boys.mobileNo,
+        email: boys.email,
+      })
       .from(boysCross)
+      .leftJoin(boys, eq(boysCross.uniqueCode, boys.uniqueCode))
       .orderBy(boysCross.time)
       .limit(20);
   else if (category === "girls")
     return await db
-      .select({ name: girlsCross.name, time: girlsCross.time })
+      .select({
+        uniqueCode: girlsCross.uniqueCode,
+        name: girlsCross.name,
+        timeCrossed: girlsCross.time,
+        phone: girls.mobileNo,
+        email: girls.email,
+      })
       .from(girlsCross)
+      .leftJoin(girls, eq(girlsCross.uniqueCode, girls.uniqueCode))
       .orderBy(girlsCross.time)
       .limit(20);
   else if (category === "walkathon")
     return await db
-      .select({ name: walkathonCross.name, time: walkathonCross.time })
+      .select({
+        uniqueCode: walkathonCross.uniqueCode,
+        name: walkathonCross.name,
+        timeCrossed: walkathonCross.time,
+        phone: walkathon.mobileNo,
+        email: walkathon.email,
+      })
       .from(walkathonCross)
+      .leftJoin(walkathon, eq(walkathonCross.uniqueCode, walkathon.uniqueCode))
       .orderBy(walkathonCross.time)
       .limit(10);
 }
