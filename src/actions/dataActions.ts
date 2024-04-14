@@ -1,6 +1,6 @@
 "use server";
 
-import { BaseFormType, CrossData2 } from "@/types/forms";
+import { BaseFormType } from "@/types/forms";
 import { db } from "@/database/db";
 
 import QRCode from "qrcode";
@@ -17,7 +17,6 @@ import {
   walkathon,
   walkathonCross,
 } from "@/database/schema";
-import { PDFDocument, rgb } from "pdf-lib";
 
 export async function getQRCode(uniqueCode: string) {
   return await db.query.master.findFirst({
@@ -55,7 +54,9 @@ export async function getParticipants(
       );
 }
 
-export async function getTopParticipants(category: "boys" | "girls" | "walkathon") {
+export async function getTopParticipants(
+  category: "boys" | "girls" | "walkathon"
+) {
   if (category === "boys")
     return await db
       .select({
