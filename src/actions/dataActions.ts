@@ -31,28 +31,6 @@ export async function getOneParticipant(participantEmail: string) {
     .where(eq(master.email, participantEmail));
 }
 
-export async function getParticipants(
-  category: "boys" | "girls" | "walkathon"
-) {
-  if (category === "boys")
-    return await db
-      .select({ name: boysCross.name, email: boys.email })
-      .from(boys)
-      .leftJoin(boysCross, eq(boys.uniqueCode, boysCross.uniqueCode));
-  else if (category === "girls")
-    return await db
-      .select({ name: girlsCross.name, email: girls.email })
-      .from(girls)
-      .leftJoin(girlsCross, eq(girls.uniqueCode, girlsCross.uniqueCode));
-  else if (category === "walkathon")
-    return await db
-      .select({ name: walkathonCross.name, email: walkathon.email })
-      .from(walkathon)
-      .leftJoin(
-        walkathonCross,
-        eq(walkathon.uniqueCode, walkathonCross.uniqueCode)
-      );
-}
 
 export async function getTopParticipants(
   category: "boys" | "girls" | "walkathon"
@@ -171,5 +149,5 @@ export async function pushData(
     });
   }
 
-  primary_transporter.sendMail(mailOpts);
+  await primary_transporter.sendMail(mailOpts);
 }

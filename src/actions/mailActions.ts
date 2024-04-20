@@ -10,24 +10,24 @@ dotenv.config({
 export const primary_transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: process.env.NEXT_PUBLIC_PRI_GMAIL_ID as string,
-    pass: process.env.NEXT_PUBLIC_PRI_GMAIL_PWD as string,
+    user: process.env.PRI_GMAIL_ID as string,
+    pass: process.env.PRI_GMAIL_PWD as string,
   },
 });
 
 export const girls_transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string,
-    pass: process.env.NEXT_PUBLIC_GIRLS_GMAIL_PWD as string,
+    user: process.env.GIRLS_GMAIL_ID as string,
+    pass: process.env.GIRLS_GMAIL_PWD as string,
   },
 });
 
 export const walkathon_transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string,
-    pass: process.env.NEXT_PUBLIC_WALKATHON_GMAIL_PWD as string,
+    user: process.env.WALKATHON_GMAIL_ID as string,
+    pass: process.env.WALKATHON_GMAIL_PWD as string,
   },
 });
 
@@ -49,18 +49,18 @@ export function getCertMailOpts(
     ],
   };
   if (category === "boys")
-    opts.from = process.env.NEXT_PUBLIC_PRI_GMAIL_ID as string;
+    opts.from = process.env.PRI_GMAIL_ID as string;
   else if (category === "girls")
-    opts.from = process.env.NEXT_PUBLIC_GIRLS_GMAIL_ID as string;
+    opts.from = process.env.GIRLS_GMAIL_ID as string;
   else if (category === "walkathon")
-    opts.from = process.env.NEXT_PUBLIC_WALKATHON_GMAIL_ID as string;
+    opts.from = process.env.WALKATHON_GMAIL_ID as string;
 
   return opts;
 }
 
 export function getQRMailOpts(name: string, email: string, qrContent: string) {
   const opts: Mail.Options = {
-    from: process.env.NEXT_PUBLIC_PRI_GMAIL_ID,
+    from: process.env.PRI_GMAIL_ID,
     to: email,
     subject: "Thank You for Participating!",
     html: `
@@ -121,11 +121,4 @@ export function getQRMailOpts(name: string, email: string, qrContent: string) {
     ],
   };
   return opts;
-}
-
-export default async function sendMailSimplified(
-  transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>,
-  mailOpts: Mail.Options
-) {
-  await transporter.sendMail(mailOpts);
 }

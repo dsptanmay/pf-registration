@@ -1,13 +1,13 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-export const MainButton = (props: { text: string; path: string }) => {
+export const MainButton = (props: { text: string; path?: string }) => {
   const router = useRouter();
   return (
     <button
       className="bg-black rounded-lg"
       onClick={() => {
-        router.push(props.path);
+        router.push(props.path as string);
       }}
     >
       <span
