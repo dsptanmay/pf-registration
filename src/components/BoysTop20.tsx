@@ -31,16 +31,21 @@ const BoysCrossComponent: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 rounded-md shadow-md m-3 sm:w-3/4 md:w-1/2 lg:w-2/5 xl:w-1/3 mx-auto p-4">
+    <div className="bg-gray-50 rounded-md shadow-md m-3 sm:w-3/4 md:w-1/2 lg:w-2/5 xl:w-1/3 mx-auto p-4 flex flex-col">
       <h1 className="text-xl font-bold mb-4 text-center">
         Top 20 Participants - Boys
       </h1>
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="bg-orange-400 text-white px-4 py-2 rounded-md w-full mb-4"
+        className="bg-black rounded-lg"
       >
-        {loading ? "Loading..." : "Fetch Data"}
+        <span
+          className="bg-orange-500 rounded-lg -translate-y-1 block gap-4 p-4 border-2 border-black
+        text-xl hover:-translate-y-2 active:translate-x-0 active:translate-y-0 transition-all"
+        >
+          {loading ? "Loading..." : "Fetch Data"}
+        </span>
       </button>
     </div>
   );
