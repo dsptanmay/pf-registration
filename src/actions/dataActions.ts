@@ -31,7 +31,6 @@ export async function getOneParticipant(participantEmail: string) {
     .where(eq(master.email, participantEmail));
 }
 
-
 export async function getTopParticipants(
   category: "boys" | "girls" | "walkathon"
 ) {
@@ -78,9 +77,14 @@ export async function getTopParticipants(
 
 export async function getSITParticipants() {
   return await db
-    .select({ name: sit.name, usn: sit.usn })
-    .from(sit)
-    .orderBy(sit.usn);
+    .select({
+      email: sit.email,
+      phone: sit.mobileNo,
+      name: sit.name,
+      uniqueCode: sit.uniqueCode,
+      usn: sit.usn,
+    })
+    .from(sit);
 }
 
 export async function pushData(
