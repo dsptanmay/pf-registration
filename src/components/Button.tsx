@@ -11,7 +11,7 @@ export const MainButton = (props: { text: string; path?: string }) => {
       }}
     >
       <span
-        className="bg-[#f2994a] block p-4 -translate-y-1 border-black border-2 rounded-lg text-2xl
+        className="bg-[#13C674] block p-4 -translate-y-1 border-black border-2 rounded-lg text-2xl
       hover:-translate-y-2 active:translate-x-0 active:translate-y-0 transition-all"
       >
         {props.text}
