@@ -1,6 +1,6 @@
 "use server";
 
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { getCertMailOpts, primary_transporter } from "@/actions/mailActions";
 
 export async function generateCertificate(
@@ -9,9 +9,10 @@ export async function generateCertificate(
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([3508, 2456]);
 
-  const font = await pdfDoc.embedFont("Times-BoldItalic");
+  const font = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+  page.setFont(font);
   const imgBytes = await fetch(
-    "https://i.postimg.cc/qq98pptL/participate.png"
+    "https://i.postimg.cc/WbsKdgG1/participate-1.png"
   ).then((img) => img.arrayBuffer());
   const textWidth = font.widthOfTextAtSize(participantName, 100);
 
