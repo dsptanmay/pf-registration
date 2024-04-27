@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 
 import dotenv from "dotenv";
 dotenv.config({
-  path: ".env.local",
+  path: ".env",
 });
 const connString = process.env.DB_URL as string;
 

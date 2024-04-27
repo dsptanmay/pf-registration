@@ -236,12 +236,12 @@ export async function generatePdf(data: CrossData[], title?: string) {
       table.y
     );
     table.writeText(
-      participant.email as string,
+      participant.email || "",
       table.x + table.cellPadding + (tableWidth * 3) / 5,
       table.y
     );
     table.writeText(
-      participant.phone as string,
+      participant.phone || "",
       table.x + table.cellPadding + (tableWidth * 4) / 5,
       table.y
     );
