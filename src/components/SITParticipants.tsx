@@ -6,8 +6,16 @@ import React, { useState } from "react";
 const SITParticipants = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
+  const toChunks = (data: SITData[], chunkSize: number) => {
+    const chunks: SITData[][] = [];
+    for (let i = 0; i < data.length; i += chunkSize)
+      chunks.push(data.slice(i, i + chunkSize));
+    return chunks;
+  };
+
   const handleDownload = async (params: SITData[]) => {
-    const pdfBytes = await generateSITPDF(params);
+    const data = toChunks(params, 57);
+    const pdfBytes = await generateSITPDF(data);
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
     const url = window.URL.createObjectURL(blob);
