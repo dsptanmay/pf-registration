@@ -167,16 +167,16 @@ export async function generatePdf(data: CrossData[], title?: string) {
   const logoBytes = await fetch(logoUrl).then((img) => img.arrayBuffer());
 
   const pngImage = await pdfDoc.embedPng(logoBytes);
-  const pngDims = pngImage.scale(0.3);
+  const pngDims = pngImage.scale(0.1);
 
   page.drawImage(pngImage, {
-    x: width / 2 - pngDims.width,
-    y: height - margin - pngDims.height,
+    x: width - margin - pngDims.width,
+    y: height - margin + 10 - pngDims.height,
     width: pngDims.width,
     height: pngDims.height,
   });
 
-  let y = height - margin * 2 - pngDims.height;
+  let y = height - margin * 2;
 
   const table = {
     x: margin,
