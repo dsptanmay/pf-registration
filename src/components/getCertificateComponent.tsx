@@ -54,15 +54,14 @@ const GetCertificateComponent = () => {
           name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your registered email address"
-          className="mb-4 px-10 py-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your registered email id"
+          className="mb-4 px-10 py-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 drop-shadow-md"
         />
         {error && <p className="mb-4 text-red-500">{error}</p>}
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
-        >
-          Submit
+        <button type="submit" className="bg-black rounded-lg">
+          <span className="block p-4 border-black border-2 -translate-y-1 bg-orange-400 rounded-lg text-white text-xl font-semibold hover:-translate-y-2 transition-all active:translate-x-0 active:translate-y-0">
+            Submit
+          </span>
         </button>
       </form>
       <ToastContainer />
