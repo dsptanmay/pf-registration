@@ -16,7 +16,7 @@ export default function IdPage({ params }: any) {
       else {
         setTimeout(() => {
           setInvalidCode(true);
-        }, 1500);
+        }, 1800);
       }
     };
 
