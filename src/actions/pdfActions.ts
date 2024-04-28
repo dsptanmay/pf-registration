@@ -1,6 +1,5 @@
 import { PDFDocument, PageSizes, rgb, StandardFonts, PDFPage } from "pdf-lib";
 import { CrossData, SITData } from "@/types/forms";
-import axios from "axios";
 
 function fixTimeFormat(time: Date) {
   const timeZoneOffset = time.getTimezoneOffset();
@@ -278,45 +277,6 @@ export async function generatePdf(data: CrossData[], title?: string) {
     const y = table.y + 8 + table.rowHeight * i;
     table.drawHorizontalLine(table.x, y, table.tableWidth);
   }
-
-  const pdfBytes = await pdfDoc.save();
-  return pdfBytes;
-}
-
-export async function generateCertificatePDF(participantName: string) {
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([3508, 2456]);
-
-  const font = await pdfDoc.embedFont(StandardFonts.TimesRomanBoldItalic);
-  const fontSize = 100;
-  page.setFont(font);
-
-  const textWidth = font.widthOfTextAtSize(participantName, fontSize);
-  const { width, height } = page.getSize();
-
-  const certBuffer = await axios
-    .get("https://i.postimg.cc/V1tcHF5n/participate-1.png", {
-      responseType: "arraybuffer",
-    })
-    .then((response) =>
-      Buffer.from(response.data, "binary").toString("base64")
-    );
-
-  const certImage = await pdfDoc.embedPng(certBuffer);
-  page.drawImage(certImage, {
-    x: 0,
-    y: 0,
-    height: 2456,
-    width: 3508,
-  });
-
-  page.drawText(participantName, {
-    x: (width - textWidth) / 2,
-    y: 1415,
-    size: fontSize,
-    color: rgb(0, 0, 0),
-    font,
-  });
 
   const pdfBytes = await pdfDoc.save();
   return pdfBytes;

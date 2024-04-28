@@ -1,10 +1,10 @@
 "use client";
 
 import { getOneParticipant } from "@/actions/dataActions";
-import { generateCertificatePDF } from "@/actions/pdfActions";
 import { toastOpts } from "@/utils/freq";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
@@ -28,6 +28,48 @@ const GetCertificateComponent = () => {
   } = useForm<formData>({ resolver: zodResolver(ucSchema) });
   const [uniqueCode, setUniqueCode] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [certificateBytes, setCertBytes] = useState<ArrayBuffer>();
+
+  useEffect(() => {
+    const fetchCertificate = async () => {
+      const certBuffer = await fetch(
+        process.env.NEXT_PUBLIC_CERT_URL as string
+      ).then((img) => img.arrayBuffer());
+      setCertBytes(certBuffer);
+    };
+    fetchCertificate();
+  }, []);
+
+  async function generateCertificatePDF(participantName: string) {
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([3508, 2456]);
+
+    const font = await pdfDoc.embedFont(StandardFonts.TimesRomanBoldItalic);
+    const fontSize = 100;
+    page.setFont(font);
+
+    const textWidth = font.widthOfTextAtSize(participantName, fontSize);
+    const { width } = page.getSize();
+
+    const certImage = await pdfDoc.embedPng(certificateBytes as ArrayBuffer);
+    page.drawImage(certImage, {
+      x: 0,
+      y: 0,
+      height: 2456,
+      width: 3508,
+    });
+
+    page.drawText(participantName, {
+      x: (width - textWidth) / 2,
+      y: 1415,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+      font,
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    return pdfBytes;
+  }
 
   const onSubmit = async (event: formData) => {
     setLoading(true);
@@ -54,7 +96,7 @@ const GetCertificateComponent = () => {
         window.URL.revokeObjectURL(url);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setLoading(false);
       }
     }
