@@ -18,6 +18,16 @@ import {
   walkathonCross,
 } from "@/database/schema";
 
+import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
+
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_AUTH_KEY || "";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 export async function getQRCode(uniqueCode: string) {
   return await db.query.master.findFirst({
     where: eq(master.uniqueCode, uniqueCode),
@@ -154,4 +164,38 @@ export async function pushData(
   }
 
   await primary_transporter.sendMail(mailOpts);
+}
+
+export async function pushCrossData(data: {
+  unique_code: string;
+  time: string;
+  name: string;
+  category: string;
+}) {
+  console.log(data);
+
+  if (data.category === "b")
+    await supabase.from("cross_boys").insert({
+      unique_code: data.unique_code,
+      name: data.unique_code,
+      time: data.time,
+    });
+  else if (data.category === "g")
+    await supabase.from("cross_girls").insert({
+      unique_code: data.unique_code,
+      name: data.unique_code,
+      time: data.time,
+    });
+  else if (data.category === "w")
+    await supabase.from("cross_walkathon").insert({
+      unique_code: data.unique_code,
+      name: data.unique_code,
+      time: data.time,
+    });
+
+  await supabase.from("cross_master").insert({
+    unique_code: data.unique_code,
+    name: data.unique_code,
+    time: data.time,
+  });
 }
