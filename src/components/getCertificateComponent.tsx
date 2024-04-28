@@ -1,83 +1,86 @@
 "use client";
-import { generateCertificate } from "@/actions/certActions";
+
 import { getOneParticipant } from "@/actions/dataActions";
-
+import { generateCertificatePDF } from "@/actions/pdfActions";
 import { toastOpts } from "@/utils/freq";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.css";
-import * as z from "zod";
 
-import pfLogo from "../../public/pf-white.png";
-import Image from "next/image";
+import { z } from "zod";
 
-const schema = z.string().regex(/^\d{5}[A-Z]$/);
+const ucSchema = z.object({
+  unique_code: z
+    .string()
+    .length(6, "Unique code must be 6 alphanumeric characters")
+    .regex(/^\d{5}[A-Z]$/, "Unique code must be alphanumeric"),
+});
+
+type formData = z.infer<typeof ucSchema>;
 
 const GetCertificateComponent = () => {
-  const [uniqueCode, setUniqueCode] = useState("");
-  const [error, setErrors] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<formData>({ resolver: zodResolver(ucSchema) });
+  const [uniqueCode, setUniqueCode] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
-    try {
-      const res = await getOneParticipant(uniqueCode);
-      if (res === undefined)
-        toast.error("Could not find participant!", toastOpts);
-      else {
-        setLoading(true);
-        const pdfBytes = await generateCertificate(res.name as string);
+  const onSubmit = async (event: formData) => {
+    setLoading(true);
+    const res = await getOneParticipant(event.unique_code);
+    if (res.length === 0) {
+      toast.error("Participant not found!", toastOpts);
+    } else {
+      try {
+        toast.success("Certificate Downloading...", toastOpts);
+        const name = res[0].name.trim();
+
+        const pdfBytes = await generateCertificatePDF(name);
+
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
 
-        document.appendChild(a);
-
         a.href = url;
-        a.download = "CertificateOfParticipation.pdf";
+        a.download = `CertificateOfParticipation-${name}.pdf`;
+
         a.click();
 
-        toast.success("Certificate downloaded successfully!", toastOpts);
         window.URL.revokeObjectURL(url);
-        document.removeChild(a);
         setLoading(false);
-      }
-      setUniqueCode("");
-      setErrors("");
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setErrors(err.issues[0].message);
-      } else {
-        console.warn(`Error: ${err}`);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
       }
     }
   };
   return (
-    <div className="h-screen flex flex-col align-middle items-center justify-center bg-gradient-to-br from-orange-500/40 via-blue-400 to-purple-400">
-      <Image
-        src={pfLogo}
-        alt="pf logo"
-        height={150}
-        className="absolute top-[1rem]"
-      />
-      <form onSubmit={handleSubmit} className="flex flex-col items-center">
-        <input
-          type="text"
-          name="unique_code"
-          value={uniqueCode}
-          onChange={(e) => setUniqueCode(e.target.value)}
-          placeholder="Enter your Unique Code"
-          className="mb-4 px-10 py-5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 drop-shadow-md"
-        />
-        {error && <p className="mb-4 text-red-500">{error}</p>}
-        <button type="submit" className="bg-black rounded-lg">
-          <span className="block p-4 border-black border-2 -translate-y-1 bg-orange-400 rounded-lg text-white text-xl font-semibold hover:-translate-y-2 transition-all active:translate-x-0 active:translate-y-0">
-            {!loading && "Submit"}
-            {loading && "Loading"}
-          </span>
-        </button>
-      </form>
+    <div className="h-screen bg-gradient-to-br from-orange-400 to-purple-400 flex items-center justify-center">
+      <div className="bg-white p-10 rounded-lg drop-shadow-lg w-auto h-1/2 flex flex-col justify-center items-center gap-4">
+        <h1 className="font-bold text-3xl text-center">
+          Download your Certificate
+        </h1>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <input
+            type="text"
+            id="unique_code"
+            {...register("unique_code")}
+            className="p-4 border border-gray-500 rounded-lg drop-shadow-md active:border-blue-400"
+            placeholder="Enter your unique code"
+          />
+          <button type="submit" className="bg-black rounded-lg">
+            <span className="block p-4 border-black border-2 -translate-y-1 bg-orange-400 rounded-lg text-white text-xl font-semibold hover:-translate-y-2 transition-all active:translate-x-0 active:translate-y-0">
+              {!loading && "Submit"}
+              {loading && "Loading..."}
+            </span>
+          </button>
+        </form>
+      </div>
       <ToastContainer />
     </div>
   );
