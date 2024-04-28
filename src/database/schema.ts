@@ -61,3 +61,9 @@ export const walkathonCross = pgTable("cross_walkathon", {
   uniqueCode: varchar("unique_code").primaryKey(),
   time: timestamp("time").notNull(),
 });
+
+export const masterCross = pgTable("cross_master", {
+  name: varchar("name").notNull(),
+  uniqueCode: varchar("unique_code").primaryKey(),
+  time: timestamp("time").notNull(),
+});
