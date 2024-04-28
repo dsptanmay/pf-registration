@@ -54,7 +54,7 @@ const BoysCrossComponent: React.FC = () => {
     const cellPadding = 5;
 
     const pngImage = await pdfDoc.embedPng(logoBytes as ArrayBuffer);
-    const pngDims = pngImage.scale(0.1);
+    const pngDims = pngImage.scale(0.015);
 
     page.drawImage(pngImage, {
       x: width - margin - pngDims.width,

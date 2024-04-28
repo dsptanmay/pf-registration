@@ -53,9 +53,8 @@ const GirlsCrossComponent: React.FC = () => {
     const rowHeight = 25;
     const cellPadding = 5;
 
-
     const pngImage = await pdfDoc.embedPng(logoBytes as ArrayBuffer);
-    const pngDims = pngImage.scale(0.1);
+    const pngDims = pngImage.scale(0.015);
 
     page.drawImage(pngImage, {
       x: width - margin - pngDims.width,
@@ -169,7 +168,6 @@ const GirlsCrossComponent: React.FC = () => {
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
   }
-
 
   const handleDownload = async (params: CrossData[]) => {
     const pdfBytes = await generatePdf(params, "Top 20 Participants - Girls");
