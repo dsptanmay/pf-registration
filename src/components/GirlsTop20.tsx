@@ -53,10 +53,8 @@ const GirlsCrossComponent: React.FC = () => {
     const rowHeight = 25;
     const cellPadding = 5;
 
-    const logoUrl = "https://i.postimg.cc/x8Jwt2dT/pf-logo-vector-5k.png";
-    const logoBytes = await fetch(logoUrl).then((img) => img.arrayBuffer());
 
-    const pngImage = await pdfDoc.embedPng(logoBytes);
+    const pngImage = await pdfDoc.embedPng(logoBytes as ArrayBuffer);
     const pngDims = pngImage.scale(0.1);
 
     page.drawImage(pngImage, {
