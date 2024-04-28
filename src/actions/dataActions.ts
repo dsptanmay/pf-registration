@@ -13,6 +13,7 @@ import {
   girls,
   girlsCross,
   master,
+  masterCross,
   sit,
   walkathon,
   walkathonCross,
@@ -34,11 +35,12 @@ export async function getQRCode(uniqueCode: string) {
   });
 }
 
-export async function getOneParticipant(participantEmail: string) {
+export async function getOneParticipant(unique_code: string) {
   return await db
-    .select()
-    .from(master)
-    .where(eq(master.email, participantEmail));
+    .select({ name: masterCross.name })
+    .from(masterCross)
+    .where(eq(masterCross.uniqueCode, unique_code))
+    .limit(1);
 }
 
 export async function getTopParticipants(
@@ -177,25 +179,25 @@ export async function pushCrossData(data: {
   if (data.category === "b")
     await supabase.from("cross_boys").insert({
       unique_code: data.unique_code,
-      name: data.unique_code,
+      name: data.name,
       time: data.time,
     });
   else if (data.category === "g")
     await supabase.from("cross_girls").insert({
       unique_code: data.unique_code,
-      name: data.unique_code,
+      name: data.name,
       time: data.time,
     });
   else if (data.category === "w")
     await supabase.from("cross_walkathon").insert({
       unique_code: data.unique_code,
-      name: data.unique_code,
+      name: data.name,
       time: data.time,
     });
 
   await supabase.from("cross_master").insert({
     unique_code: data.unique_code,
-    name: data.unique_code,
+    name: data.name,
     time: data.time,
   });
 }
