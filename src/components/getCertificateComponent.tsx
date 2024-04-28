@@ -61,7 +61,7 @@ const GetCertificateComponent = () => {
 
     page.drawText(participantName, {
       x: (width - textWidth) / 2,
-      y: 1440,
+      y: 1445,
       size: fontSize,
       color: rgb(0, 0, 0),
       font,
