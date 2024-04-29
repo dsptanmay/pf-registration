@@ -153,7 +153,7 @@ const BForm = () => {
             type="submit"
             className="bg-black rounded-lg"
           >
-            <span className="bg-orange-400 block p-4 font-semibold text-xl transition-all text-white rounded-lg -translate-y-1 translate-x-0 hover:-translate-y-2 border-2 border-black active:translate-x-0 active:translate-y-0">Submit</span>
+            <span className="bg-orange-400 block p-4 font-semibold text-xl transition-all text-black rounded-lg -translate-y-1 translate-x-0 hover:-translate-y-2 border-2 border-black active:translate-x-0 active:translate-y-0">Submit</span>
           </button>
         </form>
       </div>
