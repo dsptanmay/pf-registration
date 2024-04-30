@@ -5,7 +5,12 @@ import { db } from "@/database/db";
 
 import QRCode from "qrcode";
 
-import { getQRMailOpts, primary_transporter } from "@/actions/mailActions";
+import {
+  getQRMailOpts,
+  girls_transporter,
+  primary_transporter,
+  walkathon_transporter,
+} from "@/actions/mailActions";
 import { eq } from "drizzle-orm";
 import {
   boys,
@@ -111,7 +116,12 @@ export async function pushData(
   else if (category === "walkathon") qrData += " w";
 
   const qrDataURL = await QRCode.toDataURL(qrData);
-  const mailOpts = getQRMailOpts(formData.name, formData.email, qrDataURL);
+  const mailOpts = getQRMailOpts(
+    formData.name,
+    formData.email,
+    qrDataURL,
+    category
+  );
   formData.qrcodedata = qrDataURL.split(";base64,").pop();
 
   if (category === "boys")
@@ -165,7 +175,10 @@ export async function pushData(
     });
   }
 
-  await primary_transporter.sendMail(mailOpts);
+  if (category === "boys") await primary_transporter.sendMail(mailOpts);
+  else if (category === "girls") await girls_transporter.sendMail(mailOpts);
+  else if (category === "walkathon")
+    await walkathon_transporter.sendMail(mailOpts);
 }
 
 export async function pushCrossData(data: {

@@ -48,8 +48,7 @@ export function getCertMailOpts(
       },
     ],
   };
-  if (category === "boys")
-    opts.from = process.env.PRI_GMAIL_ID as string;
+  if (category === "boys") opts.from = process.env.PRI_GMAIL_ID as string;
   else if (category === "girls")
     opts.from = process.env.GIRLS_GMAIL_ID as string;
   else if (category === "walkathon")
@@ -58,9 +57,13 @@ export function getCertMailOpts(
   return opts;
 }
 
-export function getQRMailOpts(name: string, email: string, qrContent: string) {
+export function getQRMailOpts(
+  name: string,
+  email: string,
+  qrContent: string,
+  category: "boys" | "girls" | "walkathon"
+) {
   const opts: Mail.Options = {
-    from: process.env.PRI_GMAIL_ID,
     to: email,
     subject: "Thank You for Participating!",
     html: `
@@ -120,5 +123,12 @@ export function getQRMailOpts(name: string, email: string, qrContent: string) {
       },
     ],
   };
+
+  if (category === "boys") opts.from = process.env.PRI_GMAIL_ID as string;
+  else if (category === "girls")
+    opts.from = process.env.GIRLS_GMAIL_ID as string;
+  else if (category === "walkathon")
+    opts.from = process.env.WALKATHON_GMAIL_ID as string;
+
   return opts;
 }
