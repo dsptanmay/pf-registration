@@ -61,7 +61,8 @@ export function getQRMailOpts(
   name: string,
   email: string,
   qrContent: string,
-  category: "boys" | "girls" | "walkathon"
+  category: "boys" | "girls" | "walkathon",
+  unique_code: string
 ) {
   const opts: Mail.Options = {
     to: email,
@@ -106,6 +107,7 @@ export function getQRMailOpts(
                   <p>Hello ${name},</p>
                   <p>Thank you for participating in our event! We appreciate your contribution.</p>
                   <p>As a proof of your participation, please find your QR Code attached to this email.</p>
+                  <p>Your Unique Code: ${unique_code} </p>
                 </div>
                 <div class="footer">
                   <p>Best Regards,</p>

@@ -120,7 +120,8 @@ export async function pushData(
     formData.name,
     formData.email,
     qrDataURL,
-    category
+    category,
+    formData.unique_code
   );
   formData.qrcodedata = qrDataURL.split(";base64,").pop();
 
