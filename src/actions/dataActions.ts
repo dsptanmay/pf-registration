@@ -42,7 +42,7 @@ export async function getQRCode(uniqueCode: string) {
 
 export async function getOneParticipant(unique_code: string) {
   return await db
-    .select({ name: masterCross.name })
+    .select({ name: masterCross.name, category: masterCross.category })
     .from(masterCross)
     .where(eq(masterCross.uniqueCode, unique_code))
     .limit(1);
@@ -213,5 +213,6 @@ export async function pushCrossData(data: {
     unique_code: data.unique_code,
     name: data.name,
     time: data.time,
+    category: data.category,
   });
 }

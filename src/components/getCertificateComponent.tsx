@@ -3,7 +3,7 @@
 import { getOneParticipant } from "@/actions/dataActions";
 import { toastOpts } from "@/utils/freq";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, PDFImage, StandardFonts, rgb } from "pdf-lib";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
@@ -28,19 +28,29 @@ const GetCertificateComponent = () => {
   } = useForm<formData>({ resolver: zodResolver(ucSchema) });
   const [uniqueCode, setUniqueCode] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [certificateBytes, setCertBytes] = useState<ArrayBuffer>();
+  const [certificateBytes, setPartCertBytes] = useState<ArrayBuffer>();
+  const [walkathonBytes, setWalkathonBytes] = useState<ArrayBuffer>();
 
   useEffect(() => {
     const fetchCertificate = async () => {
       const certBuffer = await fetch(
         process.env.NEXT_PUBLIC_CERT_URL as string
       ).then((img) => img.arrayBuffer());
-      setCertBytes(certBuffer);
+      setPartCertBytes(certBuffer);
+
+      const walkBuffer = await fetch(
+        process.env.NEXT_PUBLIC_WALK_URL as string
+      ).then((img) => img.arrayBuffer());
+
+      setWalkathonBytes(walkBuffer);
     };
     fetchCertificate();
   }, []);
 
-  async function generateCertificatePDF(participantName: string) {
+  async function generateCertificatePDF(
+    participantName: string,
+    category: string
+  ) {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([3508, 2456]);
 
@@ -51,7 +61,11 @@ const GetCertificateComponent = () => {
     const textWidth = font.widthOfTextAtSize(participantName, fontSize);
     const { width } = page.getSize();
 
-    const certImage = await pdfDoc.embedPng(certificateBytes as ArrayBuffer);
+    let certImage: PDFImage;
+    certImage = await pdfDoc.embedPng(certificateBytes as ArrayBuffer);
+    if (category === "w")
+      certImage = await pdfDoc.embedPng(walkathonBytes as ArrayBuffer);
+
     page.drawImage(certImage, {
       x: 0,
       y: 0,
@@ -80,8 +94,9 @@ const GetCertificateComponent = () => {
       try {
         toast.success("Certificate Downloading...", toastOpts);
         const name = res[0].name.trim();
+        const cat = res[0].category.trim();
 
-        const pdfBytes = await generateCertificatePDF(name);
+        const pdfBytes = await generateCertificatePDF(name, cat);
 
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
