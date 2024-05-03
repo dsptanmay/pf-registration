@@ -9,7 +9,7 @@ import { MainButton } from "@/components/Button";
 const FrontPage: React.FC = () => {
   const router = useRouter();
   return (
-    <div className="max:h-screen-auto flex flex-col justify-center items-center bg-gradient-to-br gap-4 from-orange-500/35 via-blue-300 to-purple-400/40 pb-10 md:pb-28">
+    <div className="h-screen max:h-screen-auto flex flex-col justify-center items-center bg-gradient-to-br gap-4 from-orange-500/35 via-blue-300 to-purple-400/40 pb-10 md:pb-28">
       <Image
         src={pfLogo}
         alt="Pathfinder Logo"
