@@ -16,7 +16,7 @@ export default function IdPage({ params }: any) {
       else {
         setTimeout(() => {
           setInvalidCode(true);
-        }, 1800);
+        }, 2000);
       }
     };
 
@@ -48,21 +48,21 @@ export default function IdPage({ params }: any) {
 
       {baseData !== "" && (
         <div className=" bg-white rounded-[10px] p-5 flex flex-col justify-between mb-2 mr-5 ml-5 items-center">
-          <label className="text-red-500 text-wrap text-left font-semibold text-[1.2rem]">
+          <label className="text-red-500 text-wrap text-left font-bold text-[1.2rem]">
             <span className="red">* </span>This should be ready with you when
             you cross the finish line
           </label>
-          <label className="text-red-500 text-wrap text-left font-semibold text-[1.2rem]">
+          <label className="text-red-500 text-wrap text-left font-bold text-[1.2rem]">
             <span className="red">* </span>An email will be sent to you with the
-            QR Code. If possible, take a screenshot of this page
+            QR Code. Take a screenshot of this page
           </label>
         </div>
       )}
 
       {baseData !== "" && (
         <Link href={"https://chat.whatsapp.com/H8DVoN1forH0PkcQxf7wW3"}>
-          <div className="bg-green-500 p-4 rounded-[10px] pr-12 pl-12  flex flex-col justify-between mr-5 ml-5 items-center">
-            <button className="bg-green-500 p-4 rounded-[10px] text-white text-xl font-semibold  text-center">
+          <div className="bg-green-500 p-4 rounded-[10px] pr-12 pl-12 flex flex-col justify-between mr-5 ml-5 border-4 border-white items-center drop-shadow-lg">
+            <button className="bg-green-500 p-4 rounded-[10px] text-white text-xl font-semibold text-center">
               Join the Whatsapp Group for updates
             </button>
           </div>
