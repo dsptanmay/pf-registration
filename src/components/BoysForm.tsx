@@ -38,7 +38,7 @@ const BForm = () => {
       pushData(data, "boys");
       router.push(`/${data.unique_code}`);
     } else {
-      toast.error("Invalid Code!", toastOpts);
+      toast.error("Invalid Unique Code!", toastOpts);
     }
   };
   function verifyCode(code: string): boolean {
