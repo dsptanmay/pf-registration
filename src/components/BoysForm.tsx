@@ -4,6 +4,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pushData } from "@/actions/dataActions";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import { toastOpts } from "@/utils/freq";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,7 +37,9 @@ const BForm = () => {
     if (isCodeVerified) {
       pushData(data, "boys");
       router.push(`/${data.unique_code}`);
-    } else console.log("error");
+    } else {
+      toast.error("Invalid Code!", toastOpts);
+    }
   };
   function verifyCode(code: string): boolean {
     if (code.length !== 6) {
@@ -76,7 +81,7 @@ const BForm = () => {
               id="name"
               {...register("name")}
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.name ? "border-red-500" : "border-gray-300"
+                errors.name ? "border-red-500 border-2" : "border-gray-300"
               }`}
             />
             {errors.name && (
@@ -93,7 +98,7 @@ const BForm = () => {
               id="uniqueCode"
               {...register("unique_code")}
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.unique_code ? "border-red-500" : "border-gray-300"
+                errors.unique_code ? "border-red-500 border-2" : "border-gray-300"
               }`}
             />
             {errors.unique_code && (
@@ -110,7 +115,7 @@ const BForm = () => {
               id="phoneNumber"
               {...register("mobile_no")}
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.mobile_no ? "border-red-500" : "border-gray-300"
+                errors.mobile_no ? "border-red-500 border-2" : "border-gray-300"
               }`}
             />
             {errors.mobile_no && (
@@ -126,7 +131,7 @@ const BForm = () => {
               id="email"
               {...register("email")}
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.email ? "border-red-500" : "border-gray-300"
+                errors.email ? "border-red-500 border-2" : "border-gray-300"
               }`}
             />
             {errors.email && (
@@ -149,14 +154,14 @@ const BForm = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="bg-black rounded-lg"
-          >
-            <span className="bg-orange-400 block p-4 font-semibold text-xl transition-all text-black rounded-lg -translate-y-1 translate-x-0 hover:-translate-y-2 border-2 border-black active:translate-x-0 active:translate-y-0">Submit</span>
+          <button type="submit" className="bg-black rounded-lg">
+            <span className="bg-orange-400 block p-4 font-semibold text-xl transition-all text-black rounded-lg -translate-y-1 translate-x-0 hover:-translate-y-2 border-2 border-black active:translate-x-0 active:translate-y-0">
+              Submit
+            </span>
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
