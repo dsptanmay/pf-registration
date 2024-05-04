@@ -4,6 +4,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pushData } from "@/actions/dataActions";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import { toastOpts } from "@/utils/freq";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,7 +37,9 @@ const GForm = () => {
     if (isCodeVerified) {
       pushData(data, "girls");
       router.push(`/${data.unique_code}`);
-    } else console.log("error");
+    } else {
+      toast.error("Invalid Code!", toastOpts);
+    }
   };
   function verifyCode(code: string): boolean {
     if (code.length !== 6) {
@@ -156,6 +161,7 @@ const GForm = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
