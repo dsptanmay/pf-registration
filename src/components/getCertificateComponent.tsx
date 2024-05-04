@@ -118,7 +118,7 @@ const GetCertificateComponent = () => {
   };
   return (
     <div className="h-screen bg-gradient-to-br from-orange-400 to-purple-400 flex items-center justify-center">
-      <div className="bg-white p-10 rounded-lg drop-shadow-lg w-auto h-1/2 flex flex-col justify-center items-center gap-4">
+      <div className="bg-white p-10 rounded-lg drop-shadow-lg w-auto h-1/2 flex flex-col justify-center items-center gap-4 m-5">
         <h1 className="font-bold text-3xl text-center">
           Download your Certificate
         </h1>
